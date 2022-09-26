@@ -1,41 +1,45 @@
+import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
+import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import './views/contactList.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'presentation/contact-list-page/contact_list_page.dart';
+import 'injection.dart' as di;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await di.init();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) => MaterialApp(
-        home: ContactList(),
-      );
-}
+  final _appRouter = AppRouter();
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
+  MyApp({super.key});
 
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return MultiBlocProvider(
+      providers: [BlocProvider(create: (context) => di.sl<ContactBloc>())],
+      child: MyMaterialAppRouter(
+        appRouter: _appRouter,
       ),
-      body: const Center(child: Text('No Contacts')),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: const Icon(Icons.add),
-      ),
+    );
+  }
+}
+
+class MyMaterialAppRouter extends StatelessWidget {
+  final AppRouter appRouter;
+
+  const MyMaterialAppRouter({Key? key, required this.appRouter})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp.router(
+      routeInformationParser: appRouter.defaultRouteParser(),
+      routerDelegate: appRouter.delegate(),
     );
   }
 }

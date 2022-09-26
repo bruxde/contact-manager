@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class AddContact extends StatelessWidget {
+class AddContactPage extends StatelessWidget {
   @override
   Widget build(BuildContext context)=> Scaffold(
     appBar: AppBar(
