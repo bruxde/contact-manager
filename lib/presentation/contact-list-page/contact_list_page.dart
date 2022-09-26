@@ -49,41 +49,48 @@ class _ContactListPageState extends State<ContactListPage> {
                 },
                 child: SingleChildScrollView(
                   child: Center(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: contactState.contacts
-                          .map((contact) => Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 5),
-                                  decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 218, 218, 218),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        contact.id.toString(),
-                                        textAlign: TextAlign.start,
-                                      ),
-                                      Wrap(
-                                        children: [
-                                          Text(contact.firstname),
-                                          const SizedBox(
-                                            width: 8,
-                                          ),
-                                          Text(contact.lastname)
-                                        ],
-                                      ),
-                                      Text(contact.birthday.toIso8601String())
-                                    ],
+                    child: InkWell(
+                      onTap: () {
+                        AutoRouter.of(context)
+                            .push(const EditContactPageRoute());
+                      },
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: contactState.contacts
+                            .map((contact) => Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 5),
+                                    decoration: const BoxDecoration(
+                                        color:
+                                            Color.fromARGB(255, 218, 218, 218),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8))),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          contact.id.toString(),
+                                          textAlign: TextAlign.start,
+                                        ),
+                                        Wrap(
+                                          children: [
+                                            Text(contact.firstname),
+                                            const SizedBox(
+                                              width: 8,
+                                            ),
+                                            Text(contact.lastname)
+                                          ],
+                                        ),
+                                        Text(contact.birthday.toIso8601String())
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ))
-                          .toList(),
+                                ))
+                            .toList(),
+                      ),
                     ),
                   ),
                 ),

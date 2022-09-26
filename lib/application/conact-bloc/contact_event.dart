@@ -8,6 +8,11 @@ class GetAllContacts extends ContactEvent {}
 class AddNewContact extends ContactEvent {
   final ContactEntity newContact;
 
-  AddNewContact(
-      {required this.newContact});
+  AddNewContact({required this.newContact});
+}
+
+class EditContact extends ContactEvent {
+  final ContactEntity contactID;
+
+  EditContact({required this.contactID});
 }

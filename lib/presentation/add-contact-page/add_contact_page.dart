@@ -1,5 +1,6 @@
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
+import 'package:contactmanager/presentation/contact-list-page/contact_list_page.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -182,7 +183,7 @@ class _AddContactPageState extends State<AddContactPage> {
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
+          return const ContactListPage();
         },
       ));
 }

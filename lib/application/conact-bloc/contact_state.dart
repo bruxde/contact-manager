@@ -24,3 +24,9 @@ class NewContactIsCreated extends ContactState {
 
   NewContactIsCreated({required this.contactEntity});
 }
+
+class ContactIsEdited extends ContactState {
+  final ContactEntity contactID;
+
+  ContactIsEdited({required this.contactID});
+}
