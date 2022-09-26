@@ -48,49 +48,55 @@ class _ContactListPageState extends State<ContactListPage> {
                   _refreshController.refreshCompleted();
                 },
                 child: SingleChildScrollView(
-                  child: Center(
-                    child: InkWell(
-                      onTap: () {
-                        AutoRouter.of(context)
-                            .push(const EditContactPageRoute());
-                      },
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: contactState.contacts
-                            .map((contact) => Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 5),
-                                    decoration: const BoxDecoration(
-                                        color:
-                                            Color.fromARGB(255, 218, 218, 218),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8))),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          contact.id.toString(),
-                                          textAlign: TextAlign.start,
-                                        ),
-                                        Wrap(
-                                          children: [
-                                            Text(contact.firstname),
-                                            const SizedBox(
-                                              width: 8,
-                                            ),
-                                            Text(contact.lastname)
-                                          ],
-                                        ),
-                                        Text(contact.birthday.toIso8601String())
-                                      ],
-                                    ),
+                  child: InkWell(
+                    onTap: () {
+                      AutoRouter.of(context)
+                          .push(const EditContactPageRoute());
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: contactState.contacts
+                          .map((contact) => Padding(
+                                padding: const EdgeInsets.all(5.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 100, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                      color:
+                                          Color.fromARGB(255, 218, 218, 218),
+                                      borderRadius: BorderRadius.all(
+                                          Radius.circular(8))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "ID: ${contact.id}",
+                                        textAlign: TextAlign.start,
+                                      ),
+                                      Column(
+                                        children: [
+                                          Wrap(
+                                            children: [
+                                              Text("First Name: ${contact.firstname}"),
+                                              const SizedBox(
+                                                width: 8,
+                                              ),
+                                              Text("Last Name: ${contact.lastname}")
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                      Column(
+                                        children: [
+                                          Text("Birthday: ${contact.birthday.toIso8601String()}"),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                ))
-                            .toList(),
-                      ),
+                                ),
+                              ))
+                          .toList(),
                     ),
                   ),
                 ),

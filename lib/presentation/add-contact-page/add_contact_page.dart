@@ -125,7 +125,7 @@ class _AddContactPageState extends State<AddContactPage> {
                   height: 25,
                 ),
                 DateTimePicker(
-                  initialValue: '',
+                  initialValue: DateTime.now().toString(),
                   firstDate: DateTime(1900),
                   lastDate: DateTime(2024),
                   dateLabelText: 'Date',

@@ -131,7 +131,7 @@ class _EditContactPageState extends State<EditContactPage> {
             );
           }
 
-          return const CircularProgressIndicator();
+          return const Center(child: CircularProgressIndicator());
         },
       ));
 }
