@@ -4,3 +4,10 @@ part of 'contact_bloc.dart';
 abstract class ContactEvent {}
 
 class GetAllContacts extends ContactEvent {}
+
+class AddNewContact extends ContactEvent {
+  final ContactEntity newContact;
+
+  AddNewContact(
+      {required this.newContact});
+}

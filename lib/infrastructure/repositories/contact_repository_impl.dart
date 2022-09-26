@@ -23,4 +23,19 @@ class ContactRepositoryImpl extends ContactRepository {
       return Left(CommonFailure());
     }
   }
+
+  @override
+  Future<Either<Failure, ContactEntity>> addNewContact(
+      ContactEntity newContact) async {
+    try {
+      return Right(await contactRemoteDatasource.addNewContact(newContact));
+    } on LogicException {
+      return Left(LogicFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    } catch (e) {
+      print("Im here");
+      return Left(CommonFailure());
+    }
+  }
 }

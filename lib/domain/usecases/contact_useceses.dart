@@ -12,4 +12,9 @@ class ContactUsecases {
   Future<Either<Failure, List<ContactEntity>>> getContactList() async {
     return contactRepository.getContactList();
   }
+
+  Future<Either<Failure, ContactEntity>> addNewContact(
+      ContactEntity newContact) async {
+    return contactRepository.addNewContact(newContact);
+  }
 }

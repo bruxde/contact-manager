@@ -7,6 +7,8 @@ import 'package:http/retry.dart';
 
 abstract class ContactRemoteDatasource {
   Future<List<ContactEntity>> getAllContacts();
+
+  Future<ContactEntity> addNewContact(ContactEntity newContact);
 }
 
 class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
@@ -33,5 +35,26 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
     }
 
     return result;
+  }
+
+  @override
+  Future<ContactEntity> addNewContact(ContactEntity newContact) async {
+    const JsonEncoder encoder = JsonEncoder();
+    final objectAsString = encoder.convert(newContact.toJson());
+    final response = await client.post(Uri.parse("${API_SERVER}v1/contacts"),
+        headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        body: objectAsString,
+        encoding: const Utf8Codec());
+    if (response.statusCode != 200) {
+      throw ServerException();
+    }
+    final answer = jsonDecode(response.body);
+    if (answer["status"] != "success") {
+      throw LogicException();
+    }
+
+    final contact = answer["data"];
+
+    return ContactModel.fromJson(contact).toDomain();
   }
 }

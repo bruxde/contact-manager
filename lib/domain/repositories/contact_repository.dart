@@ -5,4 +5,6 @@ import '../failure/failures.dart';
 
 abstract class ContactRepository {
   Future<Either<Failure, List<ContactEntity>>> getContactList();
+
+  Future<Either<Failure, ContactEntity>> addNewContact(ContactEntity newContact);
 }

@@ -18,3 +18,9 @@ class FailureContactState extends ContactState {
 
   FailureContactState({required this.failure});
 }
+
+class NewContactIsCreated extends ContactState {
+  final ContactEntity contactEntity;
+
+  NewContactIsCreated({required this.contactEntity});
+}

@@ -1,5 +1,5 @@
 class ContactEntity {
-  final int id;
+  final int? id;
   final String firstname;
   final String lastname;
   final DateTime birthday;
@@ -11,4 +11,14 @@ class ContactEntity {
       required this.lastname,
       required this.birthday,
       required this.number});
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "firstname": firstname,
+      "lastname": lastname,
+      "birthday": birthday.millisecondsSinceEpoch,
+      "number": number
+    };
+  }
 }

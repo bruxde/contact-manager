@@ -6,6 +6,7 @@ import 'package:contactmanager/presentation/add-contact-page/add_contact_page.da
 import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 class ContactListPage extends StatefulWidget {
   const ContactListPage({Key? key}) : super(key: key);
@@ -15,6 +16,9 @@ class ContactListPage extends StatefulWidget {
 }
 
 class _ContactListPageState extends State<ContactListPage> {
+  final RefreshController _refreshController =
+      RefreshController(initialRefresh: false);
+
   @override
   void initState() {
     super.initState();
@@ -34,38 +38,49 @@ class _ContactListPageState extends State<ContactListPage> {
               contactState is LoadingContactsState) {
             return const Center(child: CircularProgressIndicator());
           } else if (contactState is AllContactsState) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: contactState.contacts
-                  .map((contact) => Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 5),
-                          decoration:
-                              const BoxDecoration(color: Colors.blueGrey),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                contact.id.toString(),
-                                textAlign: TextAlign.start,
-                              ),
-                              Wrap(
+            return SmartRefresher(
+              controller: _refreshController,
+              onRefresh: () {
+                BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+              },
+              child: BlocListener<ContactBloc, ContactState>(
+                listener: (context, state) {
+                  _refreshController.refreshCompleted();
+                },
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: contactState.contacts
+                      .map((contact) => Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 10, vertical: 5),
+                              decoration:
+                                  const BoxDecoration(color: Colors.blueGrey),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(contact.firstname),
-                                  const SizedBox(
-                                    width: 8,
+                                  Text(
+                                    contact.id.toString(),
+                                    textAlign: TextAlign.start,
                                   ),
-                                  Text(contact.lastname)
+                                  Wrap(
+                                    children: [
+                                      Text(contact.firstname),
+                                      const SizedBox(
+                                        width: 8,
+                                      ),
+                                      Text(contact.lastname)
+                                    ],
+                                  ),
+                                  Text(contact.birthday.toIso8601String())
                                 ],
                               ),
-                              Text(contact.birthday.toIso8601String())
-                            ],
-                          ),
-                        ),
-                      ))
-                  .toList(),
+                            ),
+                          ))
+                      .toList(),
+                ),
+              ),
             );
           } else if (contactState is FailureContactState) {
             return Center(

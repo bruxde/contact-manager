@@ -17,12 +17,24 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
   ContactBloc({required this.contactUsecases}) : super(ContactInitial()) {
     on<GetAllContacts>((event, emit) async {
       emit(LoadingContactsState());
-      await Future.delayed(const Duration(milliseconds: 1000));
+      // await Future.delayed(const Duration(milliseconds: 1000));
       final failureOrList = await contactUsecases.getContactList();
       await failureOrList.fold((failure) async {
         emit(FailureContactState(failure: failure));
       }, (list) async {
         emit(AllContactsState(contacts: list));
+      });
+    });
+
+    on<AddNewContact>((event, emit) async {
+      emit(LoadingContactsState());
+      final failureOrNewContact =
+          await contactUsecases.addNewContact(event.newContact);
+      await failureOrNewContact.fold((failure) async {
+        emit(FailureContactState(failure: failure));
+      }, (contact) async{
+        // TODO: show the state with created new contact
+
       });
     });
   }
