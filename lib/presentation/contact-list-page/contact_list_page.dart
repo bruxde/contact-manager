@@ -6,8 +6,19 @@ import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class ContactListPage extends StatelessWidget {
-  const ContactListPage({super.key});
+class ContactListPage extends StatefulWidget {
+  const ContactListPage({Key? key}) : super(key: key);
+
+  @override
+  State<ContactListPage> createState() => _ContactListPageState();
+}
+
+class _ContactListPageState extends State<ContactListPage> {
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+  }
 
   @override
   Widget build(BuildContext context) => Scaffold(
@@ -18,7 +29,45 @@ class ContactListPage extends StatelessWidget {
         ),
         body: BlocBuilder<ContactBloc, ContactState>(
             builder: (context, contactState) {
-          return const Center(child: Text('No Contacts'));
+          if (contactState is ContactInitial ||
+              contactState is LoadingContactsState) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (contactState is AllContactsState) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: contactState.contacts
+                  .map((contact) => Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 5),
+                          decoration:
+                              const BoxDecoration(color: Colors.blueGrey),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                contact.id.toString(),
+                                textAlign: TextAlign.start,
+                              ),
+                              Wrap(
+                                children: [
+                                  Text(contact.firstname),
+                                  const SizedBox(
+                                    width: 8,
+                                  ),
+                                  Text(contact.lastname)
+                                ],
+                              ),
+                              Text(contact.birthday.toIso8601String())
+                            ],
+                          ),
+                        ),
+                      ))
+                  .toList(),
+            );
+          }
+          return const Center(child: Text('Unknown state'));
         }),
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),

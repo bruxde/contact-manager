@@ -7,4 +7,14 @@ class ContactInitial extends ContactState {}
 
 class LoadingContactsState extends ContactState {}
 
-class AllContactsState extends ContactState {}
+class AllContactsState extends ContactState {
+  final List<ContactEntity> contacts;
+
+  AllContactsState({required this.contacts});
+}
+
+class FailureContactState extends ContactState {
+  final Failure failure;
+
+  FailureContactState({required this.failure});
+}
