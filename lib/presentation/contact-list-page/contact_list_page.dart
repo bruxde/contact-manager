@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
+import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/presentation/add-contact-page/add_contact_page.dart';
 import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:flutter/material.dart';
@@ -65,6 +66,23 @@ class _ContactListPageState extends State<ContactListPage> {
                         ),
                       ))
                   .toList(),
+            );
+          } else if (contactState is FailureContactState) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(contactState.failure is ServerFailure
+                      ? "Server error! Try again!"
+                      : "Some failure! Try again!"),
+                  TextButton(
+                      onPressed: () {
+                        BlocProvider.of<ContactBloc>(context)
+                            .add(GetAllContacts());
+                      },
+                      child: const Text("RETRY"))
+                ],
+              ),
             );
           }
           return const Center(child: Text('Unknown state'));
