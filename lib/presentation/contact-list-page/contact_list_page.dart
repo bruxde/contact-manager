@@ -47,38 +47,45 @@ class _ContactListPageState extends State<ContactListPage> {
                 listener: (context, state) {
                   _refreshController.refreshCompleted();
                 },
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: contactState.contacts
-                      .map((contact) => Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 5),
-                              decoration:
-                                  const BoxDecoration(color: Colors.blueGrey),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    contact.id.toString(),
-                                    textAlign: TextAlign.start,
-                                  ),
-                                  Wrap(
+                child: SingleChildScrollView(
+                  child: Center(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: contactState.contacts
+                          .map((contact) => Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 5),
+                                  decoration: const BoxDecoration(
+                                      color: Color.fromARGB(255, 218, 218, 218),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      Text(contact.firstname),
-                                      const SizedBox(
-                                        width: 8,
+                                      Text(
+                                        contact.id.toString(),
+                                        textAlign: TextAlign.start,
                                       ),
-                                      Text(contact.lastname)
+                                      Wrap(
+                                        children: [
+                                          Text(contact.firstname),
+                                          const SizedBox(
+                                            width: 8,
+                                          ),
+                                          Text(contact.lastname)
+                                        ],
+                                      ),
+                                      Text(contact.birthday.toIso8601String())
                                     ],
                                   ),
-                                  Text(contact.birthday.toIso8601String())
-                                ],
-                              ),
-                            ),
-                          ))
-                      .toList(),
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ),
                 ),
               ),
             );
