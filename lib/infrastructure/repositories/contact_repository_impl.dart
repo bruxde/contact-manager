@@ -19,7 +19,6 @@ class ContactRepositoryImpl extends ContactRepository {
     } on ServerException {
       return Left(ServerFailure());
     } catch (e) {
-      print("Im here");
       return Left(CommonFailure());
     }
   }
@@ -34,8 +33,12 @@ class ContactRepositoryImpl extends ContactRepository {
     } on ServerException {
       return Left(ServerFailure());
     } catch (e) {
-      print("Im here");
       return Left(CommonFailure());
     }
+  }
+  
+  @override
+  Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact) {
+    throw UnimplementedError();
   }
 }

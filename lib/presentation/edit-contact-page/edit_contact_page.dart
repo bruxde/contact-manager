@@ -1,5 +1,7 @@
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
+import 'package:contactmanager/domain/enitites/contact_entity.dart';
 import 'package:date_time_picker/date_time_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,6 +13,14 @@ class EditContactPage extends StatefulWidget {
 }
 
 class _EditContactPageState extends State<EditContactPage> {
+  final int contactID = 5631671361601536;
+  
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<ContactBloc>(context).add(EditContact(contact: ContactEntity(id: contactID, firstname: '', lastname: '', birthday: DateTime.now(), number: '') ));
+  }
+  
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
@@ -19,7 +29,6 @@ class _EditContactPageState extends State<EditContactPage> {
       ),
       body: BlocBuilder<ContactBloc, ContactState>(
         builder: (context, state) {
-          print(state);
           if (state is ContactInitial || state is ContactIsEdited) {
             return ListView(
               padding: const EdgeInsets.all(16),
@@ -122,7 +131,7 @@ class _EditContactPageState extends State<EditContactPage> {
             );
           }
 
-          return const Center(child: CircularProgressIndicator());
+          return const CircularProgressIndicator();
         },
       ));
 }

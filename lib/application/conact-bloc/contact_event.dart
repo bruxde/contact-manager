@@ -12,7 +12,7 @@ class AddNewContact extends ContactEvent {
 }
 
 class EditContact extends ContactEvent {
-  final ContactEntity contactID;
+  final ContactEntity contact;
 
-  EditContact({required this.contactID});
+  EditContact({required this.contact});
 }

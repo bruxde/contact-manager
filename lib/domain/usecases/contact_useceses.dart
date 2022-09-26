@@ -17,4 +17,8 @@ class ContactUsecases {
       ContactEntity newContact) async {
     return contactRepository.addNewContact(newContact);
   }
+  Future<Either<Failure, ContactEntity>> editContact(
+      ContactEntity contact) async {
+    return contactRepository.editContact(contact);
+  }
 }

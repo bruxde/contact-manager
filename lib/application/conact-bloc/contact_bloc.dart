@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:bloc/bloc.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/domain/usecases/contact_useceses.dart';
@@ -39,7 +37,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     on<EditContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrNewContact =
-          await contactUsecases.addNewContact(event.contactID);
+          await contactUsecases.editContact(event.contact);
       await failureOrNewContact.fold((failure) async {
         emit(FailureContactState(failure: failure));
       }, (contact) async {
