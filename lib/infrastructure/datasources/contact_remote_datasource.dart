@@ -9,6 +9,8 @@ abstract class ContactRemoteDatasource {
   Future<List<ContactEntity>> getAllContacts();
 
   Future<ContactEntity> addNewContact(ContactEntity newContact);
+
+  Future<ContactEntity> editContact(ContactEntity contact);
 }
 
 class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
@@ -54,16 +56,15 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
     }
 
     final contact = answer["data"];
-
     return ContactModel.fromJson(contact).toDomain();
   }
 
   @override
-  Future<ContactEntity> editContact(ContactEntity contact) async {
+  Future<ContactEntity> editContact(ContactEntity editContact) async {
     const JsonEncoder encoder = JsonEncoder();
-    final objectAsString = encoder.convert(contact.toJson());
+    final objectAsString = encoder.convert(editContact.toJson());
     final response = await client.put(
-        Uri.parse("${API_SERVER}v1/contacts/${contact.id}"),
+        Uri.parse("${API_SERVER}v1/contacts/${editContact.id}"),
         headers: {'Content-Type': 'application/json;charset=UTF-8'},
         body: objectAsString,
         encoding: const Utf8Codec());
@@ -75,8 +76,7 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
       throw LogicException();
     }
 
-    final editedContact = answer["data"];
-
-    return ContactModel.fromJson(editedContact).toDomain();
+    final contact = answer["data"];
+    return ContactModel.fromJson(contact).toDomain();
   }
 }

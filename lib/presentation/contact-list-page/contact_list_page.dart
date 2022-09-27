@@ -50,15 +50,17 @@ class _ContactListPageState extends State<ContactListPage> {
                   _refreshController.refreshCompleted();
                 },
                 child: SingleChildScrollView(
-                  child: InkWell(
-                    onTap: () {
-                      AutoRouter.of(context).push(const EditContactPageRoute());
-                    },
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: contactState.contacts
-                          .map((contact) => Padding(
-                                padding: const EdgeInsets.all(5.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: contactState.contacts
+                        .map((contact) => Padding(
+                              padding: const EdgeInsets.all(5.0),
+                              child: InkWell(
+                                onTap: () {
+                                  AutoRouter.of(context).push(
+                                      EditContactPageRoute(
+                                          contactEntity: contact));
+                                },
                                 child: Container(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 100, vertical: 5),
@@ -98,9 +100,9 @@ class _ContactListPageState extends State<ContactListPage> {
                                     ],
                                   ),
                                 ),
-                              ))
-                          .toList(),
-                    ),
+                              ),
+                            ))
+                        .toList(),
                   ),
                 ),
               ),

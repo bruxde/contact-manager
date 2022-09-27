@@ -41,7 +41,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await failureOrEditContact.fold((failure) async {
         emit(FailureContactState(failure: failure));
       }, (contact) async {
-        print(contact);
+        emit(ContactEdited());
       });
     });
   }

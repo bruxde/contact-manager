@@ -30,3 +30,5 @@ class ContactIsEdited extends ContactState {
 
   ContactIsEdited({required this.contact});
 }
+
+class ContactEdited extends ContactState {}

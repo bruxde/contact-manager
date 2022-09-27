@@ -14,6 +14,7 @@
 import 'package:auto_route/auto_route.dart' as _i6;
 import 'package:flutter/material.dart' as _i7;
 
+import '../../domain/enitites/contact_entity.dart' as _i8;
 import '../add-contact-page/add_contact_page.dart' as _i3;
 import '../contact-list-page/contact_list_page.dart' as _i2;
 import '../edit-contact-page/edit_contact_page.dart' as _i4;
@@ -45,9 +46,13 @@ class AppRouter extends _i6.RootStackRouter {
       );
     },
     EditContactPageRoute.name: (routeData) {
+      final args = routeData.argsAs<EditContactPageRouteArgs>();
       return _i6.MaterialPageX<dynamic>(
         routeData: routeData,
-        child: const _i4.EditContactPage(),
+        child: _i4.EditContactPage(
+          key: args.key,
+          contactEntity: args.contactEntity,
+        ),
       );
     },
     LoginPageRoute.name: (routeData) {
@@ -127,14 +132,36 @@ class AddContactPageRoute extends _i6.PageRouteInfo<void> {
 
 /// generated route for
 /// [_i4.EditContactPage]
-class EditContactPageRoute extends _i6.PageRouteInfo<void> {
-  const EditContactPageRoute()
-      : super(
+class EditContactPageRoute extends _i6.PageRouteInfo<EditContactPageRouteArgs> {
+  EditContactPageRoute({
+    _i7.Key? key,
+    required _i8.ContactEntity contactEntity,
+  }) : super(
           EditContactPageRoute.name,
           path: '/edit',
+          args: EditContactPageRouteArgs(
+            key: key,
+            contactEntity: contactEntity,
+          ),
         );
 
   static const String name = 'EditContactPageRoute';
+}
+
+class EditContactPageRouteArgs {
+  const EditContactPageRouteArgs({
+    this.key,
+    required this.contactEntity,
+  });
+
+  final _i7.Key? key;
+
+  final _i8.ContactEntity contactEntity;
+
+  @override
+  String toString() {
+    return 'EditContactPageRouteArgs{key: $key, contactEntity: $contactEntity}';
+  }
 }
 
 /// generated route for

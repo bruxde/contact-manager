@@ -60,7 +60,7 @@ class _AddContactPageState extends State<AddContactPage> {
   }
 
   String? get isNumberError {
-    if (lastName.isEmpty) {
+    if (number.isEmpty) {
       return "Cannot be empty";
     }
     return null;

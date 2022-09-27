@@ -40,7 +40,7 @@ class ContactRepositoryImpl extends ContactRepository {
   @override
   Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact) async{
     try {
-      throw UnimplementedError();
+      return Right(await contactRemoteDatasource.editContact(contact));
     } on LogicException {
     return Left(LogicFailure());
     } on ServerException {
