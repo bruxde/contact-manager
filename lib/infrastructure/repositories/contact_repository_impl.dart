@@ -52,7 +52,7 @@ class ContactRepositoryImpl extends ContactRepository {
   }
 
   @override
-  Future<Either<Failure, ContactEntity>> deleteContact(
+  Future<Either<Failure, void>> deleteContact(
       ContactEntity contact) async {
     try {
       return Right(await contactRemoteDatasource.deleteContact(contact));

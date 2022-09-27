@@ -24,7 +24,7 @@ class ContactUsecases {
     return contactRepository.editContact(contact);
   }
 
-  Future<Either<Failure, ContactEntity>> deleteContact(
+  Future<Either<Failure, void>> deleteContact(
       ContactEntity contact) async {
     return contactRepository.deleteContact(contact);
   }

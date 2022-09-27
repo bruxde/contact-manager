@@ -10,5 +10,5 @@ abstract class ContactRepository {
 
   Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact);
 
-  Future<Either<Failure, ContactEntity>> deleteContact(ContactEntity contact);
+  Future<Either<Failure, void>> deleteContact(ContactEntity contact);
 }

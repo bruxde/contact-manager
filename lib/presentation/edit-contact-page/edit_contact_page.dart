@@ -91,7 +91,7 @@ class _EditContactPageState extends State<EditContactPage> {
       ),
       body: BlocListener<ContactBloc, ContactState>(
         listener: (context, state) {
-          if (state is ContactEdited) {
+          if (state is ContactEdited || state is ContactDeleted) {
             BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
             AutoRouter.of(context).pop();
           }
@@ -214,8 +214,7 @@ class _EditContactPageState extends State<EditContactPage> {
                                                               birthday),
                                                       number: number,
                                                       id: id)));
-                                          AutoRouter.of(context).push(
-                                              const ContactListPageRoute());
+                                          Navigator.pop(context);
                                         },
                                         child: const Text(
                                           'Delete',

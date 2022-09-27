@@ -12,7 +12,7 @@ abstract class ContactRemoteDatasource {
 
   Future<ContactEntity> editContact(ContactEntity contact);
 
-  Future<ContactEntity> deleteContact(ContactEntity contact);
+  Future<void> deleteContact(ContactEntity contact);
 }
 
 class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
@@ -83,7 +83,7 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
   }
 
   @override
-  Future<ContactEntity> deleteContact(ContactEntity deleteContact) async {
+  Future<void> deleteContact(ContactEntity deleteContact) async {
     const JsonEncoder encoder = JsonEncoder();
     final objectAsString = encoder.convert(deleteContact.toJson());
     final response = await client.delete(
@@ -98,8 +98,5 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
     if (answer["status"] != "success") {
       throw LogicException();
     }
-
-    final contact = answer["data"];
-    return ContactModel.fromJson(contact).toDomain();
   }
 }
