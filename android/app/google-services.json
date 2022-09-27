@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "469434703070-0kmah3iq1ub9pjrb4a2u5u2j7fpnvtdq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.contactmanager",
+            "certificate_hash": "60badd31aa97df6bca2e28325d5bc8c8d7bc6bae"
+          }
+        },
+        {
           "client_id": "469434703070-b1998ue0im7j1f9vnjq8v3v58gk8ob80.apps.googleusercontent.com",
           "client_type": 3
         }

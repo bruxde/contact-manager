@@ -1,4 +1,5 @@
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
+import 'package:contactmanager/application/user-bloc/user_bloc.dart';
 import 'package:contactmanager/domain/usecases/contact_useceses.dart';
 import 'package:contactmanager/infrastructure/datasources/contact_remote_datasource.dart';
 import 'package:contactmanager/infrastructure/repositories/contact_repository_impl.dart';
@@ -13,6 +14,7 @@ final sl = GetIt.instance; // sl == service locator
 Future<void> init() async {
   //! application layer
   sl.registerLazySingleton(() => ContactBloc(contactUsecases: sl()));
+  sl.registerLazySingleton(() => UserBloc());
 
   //! usecases
   sl.registerLazySingleton(() => ContactUsecases(contactRepository: sl()));

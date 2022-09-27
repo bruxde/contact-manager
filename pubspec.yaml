@@ -34,13 +34,16 @@ dependencies:
   cupertino_icons: ^1.0.2
   dartz: ^0.10.1
   date_time_picker: ^2.1.0
+  firebase_auth: ^3.10.0
   firebase_core: ^1.23.0
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.1
   focused_menu: ^1.0.5
   get_it: ^7.2.0
+  google_sign_in: ^5.4.2
   http: ^0.13.5
+  material_design_icons_flutter: ^5.0.6996
   pull_to_refresh: ^2.0.0
   shared_preferences: ^2.0.15
 

@@ -38,7 +38,15 @@ class ContactRepositoryImpl extends ContactRepository {
   }
   
   @override
-  Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact) {
-    throw UnimplementedError();
+  Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact) async{
+    try {
+      throw UnimplementedError();
+    } on LogicException {
+    return Left(LogicFailure());
+    } on ServerException {
+    return Left(ServerFailure());
+    } catch (e) {
+    return Left(CommonFailure());
+    }
   }
 }

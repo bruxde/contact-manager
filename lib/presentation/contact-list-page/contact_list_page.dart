@@ -4,6 +4,7 @@ import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/presentation/add-contact-page/add_contact_page.dart';
 import 'package:contactmanager/presentation/routes/router.gr.dart';
+import 'package:contactmanager/presentation/widgets/user_actions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -31,6 +32,7 @@ class _ContactListPageState extends State<ContactListPage> {
           title: const Text('Contact List'),
           centerTitle: true,
           backgroundColor: Colors.blue,
+          actions: const [UserActions()],
         ),
         body: BlocBuilder<ContactBloc, ContactState>(
             builder: (context, contactState) {
@@ -50,8 +52,7 @@ class _ContactListPageState extends State<ContactListPage> {
                 child: SingleChildScrollView(
                   child: InkWell(
                     onTap: () {
-                      AutoRouter.of(context)
-                          .push(const EditContactPageRoute());
+                      AutoRouter.of(context).push(const EditContactPageRoute());
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -62,10 +63,9 @@ class _ContactListPageState extends State<ContactListPage> {
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 100, vertical: 5),
                                   decoration: const BoxDecoration(
-                                      color:
-                                          Color.fromARGB(255, 218, 218, 218),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(8))),
+                                      color: Color.fromARGB(255, 218, 218, 218),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8))),
                                   child: Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
@@ -78,18 +78,21 @@ class _ContactListPageState extends State<ContactListPage> {
                                         children: [
                                           Wrap(
                                             children: [
-                                              Text("First Name: ${contact.firstname}"),
+                                              Text(
+                                                  "First Name: ${contact.firstname}"),
                                               const SizedBox(
                                                 width: 8,
                                               ),
-                                              Text("Last Name: ${contact.lastname}")
+                                              Text(
+                                                  "Last Name: ${contact.lastname}")
                                             ],
                                           ),
                                         ],
                                       ),
                                       Column(
                                         children: [
-                                          Text("Birthday: ${contact.birthday.toIso8601String()}"),
+                                          Text(
+                                              "Birthday: ${contact.birthday.toIso8601String()}"),
                                         ],
                                       )
                                     ],
