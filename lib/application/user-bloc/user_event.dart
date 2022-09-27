@@ -5,6 +5,13 @@ abstract class UserEvent {}
 
 class LoginViaGoogle extends UserEvent {}
 
+class LoginViaCredential extends UserEvent {
+  final String? email;
+  final String? password;
+
+  LoginViaCredential({required this.email, required this.password});
+}
+
 class UserIsSignedOut extends UserEvent {}
 
 class UserIsSignedIn extends UserEvent {

@@ -32,7 +32,11 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Password', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20),
-              Text("or login via"),
+              TextButton(
+                  onPressed: () {},
+                  child: const Text('Login With Credentials')),
+              const SizedBox(height: 20),
+              const Text("or login via"),
               const SizedBox(
                 height: 16,
               ),

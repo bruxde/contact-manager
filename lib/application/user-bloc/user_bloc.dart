@@ -28,6 +28,22 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     return await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+  Future<void> logInViaCredentials({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await FirebaseAuth.instance
+          .signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw Exception('No user found for that email.');
+      } else if (e.code == 'wrong-password') {
+        throw Exception('Wrong password provided for that user.');
+      }
+    }
+  }
+
   UserBloc() : super(UserInitial()) {
     FirebaseAuth.instance.authStateChanges().listen((User? user) {
       if (user == null) {
@@ -60,6 +76,11 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     on<SignOut>((event, emit) async {
       emit(UserLoadingState());
       await FirebaseAuth.instance.signOut();
+    });
+    on<LoginViaCredential>((event, emit) async {
+      emit(UserLoadingState());
+      await logInViaCredentials(
+          email: event.email.toString(), password: event.password.toString());
     });
   }
 }
