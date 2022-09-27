@@ -5,9 +5,12 @@ import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/presentation/add-contact-page/add_contact_page.dart';
 import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:contactmanager/presentation/widgets/user_actions.dart';
+import 'package:contactmanager/utils/user-utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+
+import '../../application/user-bloc/user_bloc.dart';
 
 class ContactListPage extends StatefulWidget {
   const ContactListPage({Key? key}) : super(key: key);
@@ -23,7 +26,8 @@ class _ContactListPageState extends State<ContactListPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ContactBloc>(context).add(ObserveContacts());
+    BlocProvider.of<ContactBloc>(context)
+        .add(ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
   }
 
   @override
@@ -43,67 +47,75 @@ class _ContactListPageState extends State<ContactListPage> {
             return SmartRefresher(
               controller: _refreshController,
               onRefresh: () {
-                BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+                BlocProvider.of<ContactBloc>(context).add(ObserveContacts(
+                    userId: UserUtils.getCurrentUserId(context)));
               },
               child: BlocListener<ContactBloc, ContactState>(
                 listener: (context, state) {
                   _refreshController.refreshCompleted();
                 },
                 child: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: contactState.contacts
-                        .map((contact) => Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: InkWell(
-                                onTap: () {
-                                  AutoRouter.of(context).push(
-                                      EditContactPageRoute(
-                                          contactEntity: contact));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 100, vertical: 5),
-                                  decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 218, 218, 218),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "ID: ${contact.id}",
-                                        textAlign: TextAlign.start,
+                  child: contactState.contacts.isNotEmpty
+                      ? Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: contactState.contacts
+                              .map((contact) => Padding(
+                                    padding: const EdgeInsets.all(5.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        AutoRouter.of(context).push(
+                                            EditContactPageRoute(
+                                                contactEntity: contact));
+                                      },
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 100, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                            color: Color.fromARGB(
+                                                255, 218, 218, 218),
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              "ID: ${contact.id}",
+                                              textAlign: TextAlign.start,
+                                            ),
+                                            Column(
+                                              children: [
+                                                Wrap(
+                                                  children: [
+                                                    Text(
+                                                        "First Name: ${contact.firstname}"),
+                                                    const SizedBox(
+                                                      width: 8,
+                                                    ),
+                                                    Text(
+                                                        "Last Name: ${contact.lastname}")
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                            Column(
+                                              children: [
+                                                Text(
+                                                    "Birthday: ${contact.birthday.toIso8601String()}"),
+                                              ],
+                                            )
+                                          ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: [
-                                          Wrap(
-                                            children: [
-                                              Text(
-                                                  "First Name: ${contact.firstname}"),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Text(
-                                                  "Last Name: ${contact.lastname}")
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                              "Birthday: ${contact.birthday.toIso8601String()}"),
-                                        ],
-                                      )
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ))
-                        .toList(),
-                  ),
+                                    ),
+                                  ))
+                              .toList(),
+                        )
+                      : const Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Center(
+                              child: Text("You don't have any contacts yet")),
+                        ),
                 ),
               ),
             );

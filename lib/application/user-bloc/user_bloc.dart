@@ -54,6 +54,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print('${user.email} is signed in!');
 
         add(UserIsSignedIn(
+            userId: user.uid,
             name: user.displayName,
             email: user.email,
             photoURL: user.photoURL));
@@ -66,7 +67,10 @@ class UserBloc extends Bloc<UserEvent, UserState> {
 
     on<UserIsSignedIn>((event, emit) async {
       emit(UserAuthenticatedState(
-          name: event.name, email: event.email, photoURL: event.photoURL));
+          userId: event.userId,
+          name: event.name,
+          email: event.email,
+          photoURL: event.photoURL));
     });
 
     on<LoginViaGoogle>((event, emit) async {

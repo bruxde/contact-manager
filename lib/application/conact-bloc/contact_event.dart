@@ -23,7 +23,11 @@ class DeleteContact extends ContactEvent {
   DeleteContact({required this.contact});
 }
 
-class ObserveContacts extends ContactEvent {}
+class ObserveContacts extends ContactEvent {
+  final String userId;
+
+  ObserveContacts({required this.userId});
+}
 
 class ObservationFailureEvent extends ContactEvent {
   final Failure failure;

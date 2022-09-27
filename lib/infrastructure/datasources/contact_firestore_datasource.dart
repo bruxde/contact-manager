@@ -22,7 +22,9 @@ class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
         .collection("contacts")
         .snapshots()
         .map((snapshot) => right<Failure, List<ContactEntity>>(snapshot.docs
-            .map((doc) => ContactModel.fromJson(doc.data()).toDomain())
+            .map((doc) => ContactModel.fromJson(doc.data())
+                .toDomain()
+                .copyWith(id: doc.id))
             .toList()))
         // left side
         .handleError((e) {

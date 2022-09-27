@@ -1,7 +1,7 @@
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
 
 class ContactModel {
-  int? id;
+  String? id;
   String? firstname;
   String? lastname;
   String? number;
@@ -21,7 +21,7 @@ class ContactModel {
 
   ContactEntity toDomain() {
     return ContactEntity(
-        id: id ?? 0,
+        id: id ?? "0",
         firstname: firstname ?? "Unknown",
         lastname: lastname ?? "Unknown",
         birthday: DateTime.fromMillisecondsSinceEpoch(birthday ?? 0),

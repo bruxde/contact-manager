@@ -21,7 +21,7 @@ class _EditContactPageState extends State<EditContactPage> {
   String lastName = "";
   String number = "";
   int birthday = 0;
-  int id = 0;
+  String id = "";
 
   @override
   void initState() {

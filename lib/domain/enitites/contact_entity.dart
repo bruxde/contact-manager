@@ -1,5 +1,5 @@
 class ContactEntity {
-  final int? id;
+  final String? id;
   final String firstname;
   final String lastname;
   final DateTime birthday;
@@ -20,5 +20,20 @@ class ContactEntity {
       "birthday": birthday.millisecondsSinceEpoch,
       "number": number
     };
+  }
+
+  ContactEntity copyWith(
+      {String? id,
+      String? firstname,
+      String? lastname,
+      DateTime? birthday,
+      String? number}) {
+
+    return ContactEntity(
+        id: id ?? this.id,
+        firstname: firstname ?? this.firstname,
+        lastname: lastname ?? this.lastname,
+        birthday: birthday ?? this.birthday,
+        number: number ?? this.number);
   }
 }

@@ -66,8 +66,9 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       emit(LoadingContactsState());
       _streamSubscription?.cancel();
 
+      print("get user contacts of user: " + event.userId);
       _streamSubscription = contactUsecases
-          .observeContacts("WtnhZRF00Cky5Z5bA0wZ")
+          .observeContacts(event.userId)
           .listen((failureOrContacts) {
         failureOrContacts.fold((failure) {
           add(ObservationFailureEvent(failure: failure));

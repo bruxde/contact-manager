@@ -15,12 +15,13 @@ class LoginViaCredential extends UserEvent {
 class UserIsSignedOut extends UserEvent {}
 
 class UserIsSignedIn extends UserEvent {
+  final String userId;
   final String? name;
   final String? email;
   final String? photoURL;
 
   UserIsSignedIn(
-      {required this.name, required this.email, required this.photoURL});
+      {required this.userId, required this.name, required this.email, required this.photoURL});
 }
 
 class SignOut extends UserEvent {}
