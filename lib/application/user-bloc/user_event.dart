@@ -16,4 +16,11 @@ class UserIsSignedIn extends UserEvent {
       {required this.name, required this.email, required this.photoURL});
 }
 
+class LoginWithCredentials extends UserEvent {
+  final String? email;
+  final String? password;
+
+  LoginWithCredentials({required this.email, required this.password});
+}
+
 class SignOut extends UserEvent {}

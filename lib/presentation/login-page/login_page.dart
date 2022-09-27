@@ -11,6 +11,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  String email = '';
+  String password = '';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,17 +24,39 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const SizedBox(height: 25),
               TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    email = value.toString();
+                  });
+                },
                 decoration: const InputDecoration(
                     labelText: 'Email', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 25),
-              const TextField(
+              TextFormField(
+                onChanged: (value) {
+                  setState(() {
+                    password = value.toString();
+                  });
+                },
                 obscureText: true,
                 decoration: InputDecoration(
                     labelText: 'Password', border: OutlineInputBorder()),
               ),
               const SizedBox(height: 20),
               Text("or login via"),
+              const SizedBox(
+                height: 16,
+              ),
+              Expanded(
+                child: TextButton(
+                    onPressed: () {
+                      BlocProvider.of<UserBloc>(context).add(
+                          LoginWithCredentials(
+                              email: email, password: password));
+                    },
+                    child: const Text("Login")),
+              ),
               const SizedBox(
                 height: 16,
               ),
