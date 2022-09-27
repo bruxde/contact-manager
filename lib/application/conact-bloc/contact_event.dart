@@ -19,5 +19,20 @@ class EditContact extends ContactEvent {
 
 class DeleteContact extends ContactEvent {
   final ContactEntity contact;
+
   DeleteContact({required this.contact});
+}
+
+class ObserveContacts extends ContactEvent {}
+
+class ObservationFailureEvent extends ContactEvent {
+  final Failure failure;
+
+  ObservationFailureEvent({required this.failure});
+}
+
+class ObservationContactListEvent extends ContactEvent {
+  final List<ContactEntity> contacts;
+
+  ObservationContactListEvent({required this.contacts});
 }

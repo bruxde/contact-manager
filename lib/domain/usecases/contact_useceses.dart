@@ -24,8 +24,11 @@ class ContactUsecases {
     return contactRepository.editContact(contact);
   }
 
-  Future<Either<Failure, void>> deleteContact(
-      ContactEntity contact) async {
+  Future<Either<Failure, void>> deleteContact(ContactEntity contact) async {
     return contactRepository.deleteContact(contact);
+  }
+
+  Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId) {
+    return contactRepository.observeContacts(userId);
   }
 }

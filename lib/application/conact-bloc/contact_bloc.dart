@@ -1,6 +1,9 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/domain/usecases/contact_useceses.dart';
+import 'package:dartz/dartz.dart';
 import 'package:meta/meta.dart';
 
 import '../../domain/enitites/contact_entity.dart';
@@ -11,6 +14,8 @@ part 'contact_state.dart';
 
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactUsecases contactUsecases;
+
+  StreamSubscription<Either<Failure, List<ContactEntity>>>? _streamSubscription;
 
   ContactBloc({required this.contactUsecases}) : super(ContactInitial()) {
     on<GetAllContacts>((event, emit) async {
@@ -34,6 +39,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         // TODO: show the state with created new contact
       });
     });
+
     on<EditContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrEditContact =
@@ -44,6 +50,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         emit(ContactEdited());
       });
     });
+
     on<DeleteContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrEditContact =
@@ -53,6 +60,31 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       }, (contact) async {
         emit(ContactDeleted());
       });
+    });
+
+    on<ObserveContacts>((event, emit) async {
+      emit(LoadingContactsState());
+      _streamSubscription?.cancel();
+
+      _streamSubscription = contactUsecases
+          .observeContacts("WtnhZRF00Cky5Z5bA0wZ")
+          .listen((failureOrContacts) {
+        failureOrContacts.fold((failure) {
+          add(ObservationFailureEvent(failure: failure));
+        }, (contacts) {
+          add(ObservationContactListEvent(contacts: contacts));
+        });
+      });
+    });
+
+    on<ObservationFailureEvent>((event, emit) {
+      emit(FailureContactState(failure: event.failure));
+    });
+
+    on<ObservationContactListEvent>((event, emit) {
+      emit(AllContactsState(
+        contacts: event.contacts,
+      ));
     });
   }
 }

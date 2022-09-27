@@ -5,10 +5,14 @@ import 'package:contactmanager/infrastructure/datasources/contact_remote_datasou
 import 'package:contactmanager/infrastructure/exceptions/exceptions.dart';
 import 'package:dartz/dartz.dart';
 
+import '../datasources/contact_firestore_datasource.dart';
+
 class ContactRepositoryImpl extends ContactRepository {
   final ContactRemoteDatasource contactRemoteDatasource;
+  final ContactFirestoreDatasource contactFirestoreDatasource;
 
-  ContactRepositoryImpl({required this.contactRemoteDatasource});
+  ContactRepositoryImpl(
+      {required this.contactRemoteDatasource, required this.contactFirestoreDatasource});
 
   @override
   Future<Either<Failure, List<ContactEntity>>> getContactList() async {
@@ -52,8 +56,7 @@ class ContactRepositoryImpl extends ContactRepository {
   }
 
   @override
-  Future<Either<Failure, void>> deleteContact(
-      ContactEntity contact) async {
+  Future<Either<Failure, void>> deleteContact(ContactEntity contact) async {
     try {
       return Right(await contactRemoteDatasource.deleteContact(contact));
     } on LogicException {
@@ -63,5 +66,10 @@ class ContactRepositoryImpl extends ContactRepository {
     } catch (e) {
       return Left(CommonFailure());
     }
+  }
+
+  @override
+  Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId) {
+    return contactFirestoreDatasource.observeContacts(userId);
   }
 }

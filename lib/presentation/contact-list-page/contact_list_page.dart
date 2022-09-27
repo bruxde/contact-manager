@@ -23,7 +23,7 @@ class _ContactListPageState extends State<ContactListPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+    BlocProvider.of<ContactBloc>(context).add(ObserveContacts());
   }
 
   @override
