@@ -57,4 +57,26 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
 
     return ContactModel.fromJson(contact).toDomain();
   }
+
+  @override
+  Future<ContactEntity> editContact(ContactEntity contact) async {
+    const JsonEncoder encoder = JsonEncoder();
+    final objectAsString = encoder.convert(contact.toJson());
+    final response = await client.put(
+        Uri.parse("${API_SERVER}v1/contacts/${contact.id}"),
+        headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        body: objectAsString,
+        encoding: const Utf8Codec());
+    if (response.statusCode != 200) {
+      throw ServerException();
+    }
+    final answer = jsonDecode(response.body);
+    if (answer["status"] != "success") {
+      throw LogicException();
+    }
+
+    final editedContact = answer["data"];
+
+    return ContactModel.fromJson(editedContact).toDomain();
+  }
 }

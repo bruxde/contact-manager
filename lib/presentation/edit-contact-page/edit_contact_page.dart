@@ -14,13 +14,19 @@ class EditContactPage extends StatefulWidget {
 
 class _EditContactPageState extends State<EditContactPage> {
   final int contactID = 5631671361601536;
-  
+
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ContactBloc>(context).add(EditContact(contact: ContactEntity(id: contactID, firstname: '', lastname: '', birthday: DateTime.now(), number: '') ));
+    BlocProvider.of<ContactBloc>(context).add(EditContact(
+        contact: ContactEntity(
+            id: contactID,
+            firstname: '',
+            lastname: '',
+            birthday: DateTime.now(),
+            number: '')));
   }
-  
+
   @override
   Widget build(BuildContext context) => Scaffold(
       appBar: AppBar(
