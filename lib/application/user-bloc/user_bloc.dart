@@ -35,6 +35,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
     try {
       await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: email, password: password);
+      print('User connected');
     } on FirebaseAuthException catch (e) {
       if (e.code == 'user-not-found') {
         throw Exception('No user found for that email.');
