@@ -72,4 +72,9 @@ class ContactRepositoryImpl extends ContactRepository {
   Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId) {
     return contactFirestoreDatasource.observeContacts(userId);
   }
+
+  @override
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(String userId, ContactEntity newContact) {
+    return contactFirestoreDatasource.addNewContactToFirestore(userId, newContact);
+  }
 }

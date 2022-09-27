@@ -11,6 +11,13 @@ class AddNewContact extends ContactEvent {
   AddNewContact({required this.newContact});
 }
 
+class AddNewContactToFirestore extends ContactEvent {
+  final String userId;
+  final ContactEntity newContact;
+
+  AddNewContactToFirestore({required this.userId, required this.newContact});
+}
+
 class EditContact extends ContactEvent {
   final ContactEntity contact;
 

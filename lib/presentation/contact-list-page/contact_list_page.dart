@@ -129,8 +129,9 @@ class _ContactListPageState extends State<ContactListPage> {
                       : "Some failure! Try again!"),
                   TextButton(
                       onPressed: () {
-                        BlocProvider.of<ContactBloc>(context)
-                            .add(GetAllContacts());
+                        BlocProvider.of<ContactBloc>(context).add(
+                            ObserveContacts(
+                                userId: UserUtils.getCurrentUserId(context)));
                       },
                       child: const Text("RETRY"))
                 ],

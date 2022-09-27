@@ -40,6 +40,17 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       });
     });
 
+    on<AddNewContactToFirestore>((event, emit) async {
+      emit(LoadingContactsState());
+      final failureOrNewContact = await contactUsecases
+          .addNewContactToFirestore(event.userId, event.newContact);
+      await failureOrNewContact.fold((failure) async {
+        emit(FailureContactState(failure: failure));
+      }, (contact) async {
+        emit(NewContactIsCreated(contactEntity: contact));
+      });
+    });
+
     on<EditContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrEditContact =

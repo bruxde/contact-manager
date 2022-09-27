@@ -31,4 +31,8 @@ class ContactUsecases {
   Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId) {
     return contactRepository.observeContacts(userId);
   }
+
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(String userId, ContactEntity newContact){
+    return contactRepository.addNewContactToFirestore(userId, newContact);
+  }
 }

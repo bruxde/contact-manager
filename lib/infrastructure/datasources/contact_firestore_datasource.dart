@@ -6,6 +6,9 @@ import 'package:dartz/dartz.dart';
 
 abstract class ContactFirestoreDatasource {
   Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId);
+
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(
+      String userId, ContactEntity newContact);
 }
 
 class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
@@ -33,5 +36,21 @@ class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
       }
       return Left(CommonFailure());
     });
+  }
+
+  @override
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(
+      String userId, ContactEntity newContact) async {
+    final documentReference = firestore.collection("users").doc(userId);
+    final result = await documentReference
+        .collection("contacts")
+        .add(newContact.toJson())
+        .catchError((e) {
+      if (e is FirebaseException) {
+        return Left(ServerFailure(details: e.message));
+      }
+      return Left(CommonFailure());
+    });
+    return Right(newContact);
   }
 }

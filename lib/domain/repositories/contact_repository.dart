@@ -13,4 +13,7 @@ abstract class ContactRepository {
   Future<Either<Failure, void>> deleteContact(ContactEntity contact);
 
   Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId);
+
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(String userId,
+      ContactEntity newContact);
 }
