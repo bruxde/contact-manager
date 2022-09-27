@@ -43,8 +43,6 @@ class _LoginPageState extends State<LoginPage> {
                 decoration: InputDecoration(
                     labelText: 'Password', border: OutlineInputBorder()),
               ),
-              const SizedBox(height: 20),
-              Text("or login via"),
               const SizedBox(
                 height: 16,
               ),
@@ -57,6 +55,10 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: const Text("Login")),
               ),
+              const SizedBox(
+                height: 16,
+              ),
+              Text("or login via"),
               const SizedBox(
                 height: 16,
               ),

@@ -36,17 +36,32 @@ class ContactRepositoryImpl extends ContactRepository {
       return Left(CommonFailure());
     }
   }
-  
+
   @override
-  Future<Either<Failure, ContactEntity>> editContact(ContactEntity contact) async{
+  Future<Either<Failure, ContactEntity>> editContact(
+      ContactEntity contact) async {
     try {
       return Right(await contactRemoteDatasource.editContact(contact));
     } on LogicException {
-    return Left(LogicFailure());
+      return Left(LogicFailure());
     } on ServerException {
-    return Left(ServerFailure());
+      return Left(ServerFailure());
     } catch (e) {
-    return Left(CommonFailure());
+      return Left(CommonFailure());
+    }
+  }
+
+  @override
+  Future<Either<Failure, ContactEntity>> deleteContact(
+      ContactEntity oldcontact) async {
+    try {
+      return Right(await contactRemoteDatasource.deleteContact(oldcontact));
+    } on LogicException {
+      return Left(LogicFailure());
+    } on ServerException {
+      return Left(ServerFailure());
+    } catch (e) {
+      return Left(CommonFailure());
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:auto_route/annotations.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
+import 'package:contactmanager/domain/enitites/contact_entity.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/presentation/add-contact-page/add_contact_page.dart';
 import 'package:contactmanager/presentation/routes/router.gr.dart';
@@ -32,7 +33,6 @@ class _ContactListPageState extends State<ContactListPage> {
           title: const Text('Contact List'),
           centerTitle: true,
           backgroundColor: Colors.blue,
-          actions: const [UserActions()],
         ),
         body: BlocBuilder<ContactBloc, ContactState>(
             builder: (context, contactState) {
@@ -54,51 +54,73 @@ class _ContactListPageState extends State<ContactListPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: contactState.contacts
                         .map((contact) => Padding(
-                              padding: const EdgeInsets.all(5.0),
-                              child: InkWell(
-                                onTap: () {
-                                  AutoRouter.of(context).push(
-                                      EditContactPageRoute(
-                                          contactEntity: contact));
-                                },
-                                child: Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 100, vertical: 5),
-                                  decoration: const BoxDecoration(
-                                      color: Color.fromARGB(255, 218, 218, 218),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "ID: ${contact.id}",
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 5),
+                                decoration: const BoxDecoration(
+                                    color: Color.fromARGB(255, 218, 218, 218),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8))),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ListTile(
+                                      leading: CircleAvatar(
+                                        child: Icon(Icons.person),
+                                      ),
+                                      title: Text(
+                                        contact.firstname +
+                                            " " +
+                                            contact.lastname,
+                                        style: TextStyle(
+                                            fontSize: 18.0,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      subtitle: Text(
+                                        contact.id.toString() +
+                                            "\n" +
+                                            contact.birthday.toIso8601String(),
                                         textAlign: TextAlign.start,
                                       ),
-                                      Column(
-                                        children: [
-                                          Wrap(
-                                            children: [
-                                              Text(
-                                                  "First Name: ${contact.firstname}"),
-                                              const SizedBox(
-                                                width: 8,
-                                              ),
-                                              Text(
-                                                  "Last Name: ${contact.lastname}")
-                                            ],
-                                          ),
-                                        ],
+                                      trailing: Container(
+                                        width: 70,
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      AutoRouter.of(context).push(
+                                                          EditContactPageRoute(
+                                                              contactEntity:
+                                                                  contact));
+                                                    },
+                                                    icon: Icon(Icons.edit))),
+                                            Expanded(
+                                                child: IconButton(
+                                                    onPressed: () {
+                                                      BlocProvider.of<
+                                                                  ContactBloc>(
+                                                              context)
+                                                          .add(DeleteContact(
+                                                              oldcontact: ContactEntity(
+                                                                  firstname: contact
+                                                                      .firstname,
+                                                                  lastname: contact
+                                                                      .lastname,
+                                                                  birthday: contact
+                                                                      .birthday,
+                                                                  id: contact
+                                                                      .id,
+                                                                  number: contact
+                                                                      .number)));
+                                                    },
+                                                    icon: Icon(Icons.delete))),
+                                          ],
+                                        ),
                                       ),
-                                      Column(
-                                        children: [
-                                          Text(
-                                              "Birthday: ${contact.birthday.toIso8601String()}"),
-                                        ],
-                                      )
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ))

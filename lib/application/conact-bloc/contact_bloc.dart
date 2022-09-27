@@ -34,6 +34,7 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         // TODO: show the state with created new contact
       });
     });
+
     on<EditContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrEditContact =
@@ -42,6 +43,17 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         emit(FailureContactState(failure: failure));
       }, (contact) async {
         emit(ContactEdited());
+      });
+    });
+
+    on<DeleteContact>((event, emit) async {
+      emit(LoadingContactsState());
+      final failureOrDeleteContact =
+          await contactUsecases.deleteContact(event.oldcontact);
+      await failureOrDeleteContact.fold((failure) async {
+        emit(FailureContactState(failure: failure));
+      }, (contact) async {
+        emit(ContactDeleted());
       });
     });
   }

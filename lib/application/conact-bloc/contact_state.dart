@@ -32,3 +32,5 @@ class ContactIsEdited extends ContactState {
 }
 
 class ContactEdited extends ContactState {}
+
+class ContactDeleted extends ContactState {}
