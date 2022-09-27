@@ -10,10 +10,10 @@ class UserActions extends StatelessWidget {
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
       itemBuilder: (context) {
-        return [const PopupMenuItem<int>(value: 0,child: Text("Logout"))];
+        return [const PopupMenuItem<int>(value: 0, child: Text("Logout"))];
       },
-      onSelected: (item){
-        switch(item){
+      onSelected: (item) {
+        switch (item) {
           case 0:
             // Logout
             BlocProvider.of<UserBloc>(context).add(SignOut());

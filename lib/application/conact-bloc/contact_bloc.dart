@@ -44,5 +44,15 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
         emit(ContactEdited());
       });
     });
+    on<DeleteContact>((event, emit) async {
+      emit(LoadingContactsState());
+      final failureOrEditContact =
+          await contactUsecases.deleteContact(event.contact);
+      await failureOrEditContact.fold((failure) async {
+        emit(FailureContactState(failure: failure));
+      }, (contact) async {
+        emit(ContactDeleted());
+      });
+    });
   }
 }

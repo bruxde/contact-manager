@@ -16,3 +16,8 @@ class EditContact extends ContactEvent {
 
   EditContact({required this.contact});
 }
+
+class DeleteContact extends ContactEvent {
+  final ContactEntity contact;
+  DeleteContact({required this.contact});
+}

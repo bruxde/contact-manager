@@ -11,6 +11,8 @@ abstract class ContactRemoteDatasource {
   Future<ContactEntity> addNewContact(ContactEntity newContact);
 
   Future<ContactEntity> editContact(ContactEntity contact);
+
+  Future<ContactEntity> deleteContact(ContactEntity contact);
 }
 
 class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
@@ -65,6 +67,27 @@ class ContactRemoteDatasourceImpl extends ContactRemoteDatasource {
     final objectAsString = encoder.convert(editContact.toJson());
     final response = await client.put(
         Uri.parse("${API_SERVER}v1/contacts/${editContact.id}"),
+        headers: {'Content-Type': 'application/json;charset=UTF-8'},
+        body: objectAsString,
+        encoding: const Utf8Codec());
+    if (response.statusCode != 200) {
+      throw ServerException();
+    }
+    final answer = jsonDecode(response.body);
+    if (answer["status"] != "success") {
+      throw LogicException();
+    }
+
+    final contact = answer["data"];
+    return ContactModel.fromJson(contact).toDomain();
+  }
+
+  @override
+  Future<ContactEntity> deleteContact(ContactEntity deleteContact) async {
+    const JsonEncoder encoder = JsonEncoder();
+    final objectAsString = encoder.convert(deleteContact.toJson());
+    final response = await client.delete(
+        Uri.parse("${API_SERVER}v1/contacts/${deleteContact.id}"),
         headers: {'Content-Type': 'application/json;charset=UTF-8'},
         body: objectAsString,
         encoding: const Utf8Codec());

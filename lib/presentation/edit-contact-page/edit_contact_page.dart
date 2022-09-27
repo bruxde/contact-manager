@@ -1,6 +1,7 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
+import 'package:contactmanager/presentation/routes/router.gr.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -189,15 +190,45 @@ class _EditContactPageState extends State<EditContactPage> {
                                         id: id)));
                           }
                         : null,
-
                     label: const Text('Edit contact'),
                     icon: const Icon(Icons.edit),
-
-                    // icon: const Icon(Icons.save),
-                    // label: const Text(
-                    //   'Save',
-                    // ),
                   ),
+                  TextButton(
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                                  title: const Text('Delete'),
+                                  content: Text(
+                                      'Are you sure you want to delete contact ${firstName} ${lastName}'),
+                                  actions: [
+                                    TextButton(
+                                        onPressed: () {
+                                          BlocProvider.of<ContactBloc>(context)
+                                              .add(DeleteContact(
+                                                  contact: ContactEntity(
+                                                      firstname: firstName,
+                                                      lastname: lastName,
+                                                      birthday: DateTime
+                                                          .fromMillisecondsSinceEpoch(
+                                                              birthday),
+                                                      number: number,
+                                                      id: id)));
+                                          AutoRouter.of(context).push(
+                                              const ContactListPageRoute());
+                                        },
+                                        child: const Text(
+                                          'Delete',
+                                          style: TextStyle(color: Colors.red),
+                                        )),
+                                    TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'))
+                                  ],
+                                ));
+                      },
+                      child: const Text('Delete Contact',
+                          style: TextStyle(color: Colors.red)))
                 ],
               );
             } else if (state is FailureContactState) {

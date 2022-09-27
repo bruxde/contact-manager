@@ -1,3 +1,4 @@
+import 'package:contactmanager/application/conact-bloc/contact_bloc.dart';
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
 import 'package:contactmanager/domain/repositories/contact_repository.dart';
 import 'package:dartz/dartz.dart';
@@ -17,8 +18,14 @@ class ContactUsecases {
       ContactEntity newContact) async {
     return contactRepository.addNewContact(newContact);
   }
+
   Future<Either<Failure, ContactEntity>> editContact(
       ContactEntity contact) async {
     return contactRepository.editContact(contact);
+  }
+
+  Future<Either<Failure, ContactEntity>> deleteContact(
+      ContactEntity contact) async {
+    return contactRepository.deleteContact(contact);
   }
 }

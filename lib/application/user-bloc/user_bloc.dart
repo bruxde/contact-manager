@@ -51,7 +51,7 @@ class UserBloc extends Bloc<UserEvent, UserState> {
         print('User is currently signed out!');
         add(UserIsSignedOut());
       } else {
-        print('User is signed in!');
+        print('${user.email} is signed in!');
 
         add(UserIsSignedIn(
             name: user.displayName,
