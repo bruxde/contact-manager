@@ -6,17 +6,25 @@ class ContactModel {
   String? lastname;
   String? number;
   int? birthday;
+  String? state;
 
   ContactModel(
-      {this.id, this.firstname, this.lastname, this.number, this.birthday});
+      {this.id,
+      this.firstname,
+      this.lastname,
+      this.number,
+      this.birthday,
+      this.state});
 
   static ContactModel fromJson(Map<String, dynamic> json) {
     return ContactModel(
-        id: json["id"],
-        firstname: json["firstname"],
-        lastname: json["lastname"],
-        number: json["number"],
-        birthday: json["birthday"]);
+      id: json["id"],
+      firstname: json["firstname"],
+      lastname: json["lastname"],
+      number: json["number"],
+      birthday: json["birthday"],
+      state: json["state"],
+    );
   }
 
   ContactEntity toDomain() {
@@ -25,6 +33,7 @@ class ContactModel {
         firstname: firstname ?? "Unknown",
         lastname: lastname ?? "Unknown",
         birthday: DateTime.fromMillisecondsSinceEpoch(birthday ?? 0),
-        number: number ?? "Unkown");
+        number: number ?? "Unkown",
+        state: state ?? "Unknown");
   }
 }

@@ -9,6 +9,9 @@ abstract class ContactFirestoreDatasource {
 
   Future<Either<Failure, ContactEntity>> addNewContactToFirestore(
       String userId, ContactEntity newContact);
+
+  Future<Either<Failure, ContactEntity>> editContact(
+      String userId, ContactEntity contact);
 }
 
 class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
@@ -52,5 +55,22 @@ class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
       return Left(CommonFailure());
     });
     return Right(newContact);
+  }
+
+  @override
+  Future<Either<Failure, ContactEntity>> editContact(
+      String userId, ContactEntity contact) async {
+    final documentReference = firestore.collection("users").doc(userId);
+    final result = await documentReference
+        .collection("contacts")
+        .doc(contact.id)
+        .update(contact.toJson())
+        .catchError((e) {
+      if (e is FirebaseException) {
+        return Left(ServerFailure(details: e.message));
+      }
+      return Left(CommonFailure());
+    });
+    return Right(contact);
   }
 }

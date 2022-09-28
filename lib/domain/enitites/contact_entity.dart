@@ -4,13 +4,15 @@ class ContactEntity {
   final String lastname;
   final DateTime birthday;
   final String number;
+  final String state;
 
   ContactEntity(
       {required this.id,
       required this.firstname,
       required this.lastname,
       required this.birthday,
-      required this.number});
+      required this.number,
+      required this.state});
 
   Map<String, dynamic> toJson() {
     return {
@@ -18,7 +20,8 @@ class ContactEntity {
       "firstname": firstname,
       "lastname": lastname,
       "birthday": birthday.millisecondsSinceEpoch,
-      "number": number
+      "number": number,
+      "state": state
     };
   }
 
@@ -27,13 +30,15 @@ class ContactEntity {
       String? firstname,
       String? lastname,
       DateTime? birthday,
-      String? number}) {
+      String? number,
+      String? state}) {
 
     return ContactEntity(
         id: id ?? this.id,
         firstname: firstname ?? this.firstname,
         lastname: lastname ?? this.lastname,
         birthday: birthday ?? this.birthday,
-        number: number ?? this.number);
+        number: number ?? this.number,
+        state: state ?? this.state);
   }
 }

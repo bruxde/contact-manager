@@ -16,4 +16,7 @@ abstract class ContactRepository {
 
   Future<Either<Failure, ContactEntity>> addNewContactToFirestore(String userId,
       ContactEntity newContact);
+
+  Future<Either<Failure, ContactEntity>> editContactOnFirestore(String userId,
+      ContactEntity newContact);
 }

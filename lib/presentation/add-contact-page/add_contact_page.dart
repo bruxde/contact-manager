@@ -77,7 +77,8 @@ class _AddContactPageState extends State<AddContactPage> {
       body: BlocListener<ContactBloc, ContactState>(
         listener: (context, state) {
           if (state is NewContactIsCreated) {
-            BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+            BlocProvider.of<ContactBloc>(context).add(
+                ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
             AutoRouter.of(context).pop();
           }
         },
@@ -177,6 +178,7 @@ class _AddContactPageState extends State<AddContactPage> {
                                             DateTime.fromMillisecondsSinceEpoch(
                                                 birthday),
                                         number: number,
+                                        state: "initial",
                                         id: null)));
                           }
                         : null,

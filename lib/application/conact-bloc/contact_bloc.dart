@@ -62,6 +62,17 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       });
     });
 
+    on<EditContactOnFirestore>((event, emit) async {
+      emit(LoadingContactsState());
+      final failureOrEditContact = await contactUsecases.editContactOnFirestore(
+          event.userId, event.contact);
+      await failureOrEditContact.fold((failure) async {
+        emit(FailureContactState(failure: failure));
+      }, (contact) async {
+        emit(ContactEdited());
+      });
+    });
+
     on<DeleteContact>((event, emit) async {
       emit(LoadingContactsState());
       final failureOrEditContact =

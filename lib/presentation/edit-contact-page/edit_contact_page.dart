@@ -7,6 +7,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../utils/user-utils.dart';
+
 class EditContactPage extends StatefulWidget {
   final ContactEntity contactEntity;
 
@@ -92,7 +94,8 @@ class _EditContactPageState extends State<EditContactPage> {
       body: BlocListener<ContactBloc, ContactState>(
         listener: (context, state) {
           if (state is ContactEdited || state is ContactDeleted) {
-            BlocProvider.of<ContactBloc>(context).add(GetAllContacts());
+            BlocProvider.of<ContactBloc>(context).add(
+                ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
             AutoRouter.of(context).pop();
           }
         },
@@ -179,7 +182,7 @@ class _EditContactPageState extends State<EditContactPage> {
                             birthday > 0
                         ? () {
                             BlocProvider.of<ContactBloc>(context).add(
-                                EditContact(
+                                EditContactOnFirestore(
                                     contact: ContactEntity(
                                         firstname: firstName,
                                         lastname: lastName,
@@ -187,7 +190,10 @@ class _EditContactPageState extends State<EditContactPage> {
                                             DateTime.fromMillisecondsSinceEpoch(
                                                 birthday),
                                         number: number,
-                                        id: id)));
+                                        state: "initial",
+                                        id: id),
+                                    userId:
+                                        UserUtils.getCurrentUserId(context)));
                           }
                         : null,
                     label: const Text('Edit contact'),
@@ -213,6 +219,8 @@ class _EditContactPageState extends State<EditContactPage> {
                                                           .fromMillisecondsSinceEpoch(
                                                               birthday),
                                                       number: number,
+                                                      state: widget
+                                                          .contactEntity.state,
                                                       id: id)));
                                           Navigator.pop(context);
                                         },

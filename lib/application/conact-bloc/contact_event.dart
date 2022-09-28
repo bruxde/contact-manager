@@ -24,6 +24,13 @@ class EditContact extends ContactEvent {
   EditContact({required this.contact});
 }
 
+class EditContactOnFirestore extends ContactEvent {
+  final String userId;
+  final ContactEntity contact;
+
+  EditContactOnFirestore({required this.userId, required this.contact});
+}
+
 class DeleteContact extends ContactEvent {
   final ContactEntity contact;
 

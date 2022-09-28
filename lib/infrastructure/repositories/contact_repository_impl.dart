@@ -12,7 +12,8 @@ class ContactRepositoryImpl extends ContactRepository {
   final ContactFirestoreDatasource contactFirestoreDatasource;
 
   ContactRepositoryImpl(
-      {required this.contactRemoteDatasource, required this.contactFirestoreDatasource});
+      {required this.contactRemoteDatasource,
+      required this.contactFirestoreDatasource});
 
   @override
   Future<Either<Failure, List<ContactEntity>>> getContactList() async {
@@ -74,7 +75,15 @@ class ContactRepositoryImpl extends ContactRepository {
   }
 
   @override
-  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(String userId, ContactEntity newContact) {
-    return contactFirestoreDatasource.addNewContactToFirestore(userId, newContact);
+  Future<Either<Failure, ContactEntity>> addNewContactToFirestore(
+      String userId, ContactEntity newContact) {
+    return contactFirestoreDatasource.addNewContactToFirestore(
+        userId, newContact);
+  }
+
+  @override
+  Future<Either<Failure, ContactEntity>> editContactOnFirestore(
+      String userId, ContactEntity newContact) {
+    return contactFirestoreDatasource.editContact(userId, newContact);
   }
 }
