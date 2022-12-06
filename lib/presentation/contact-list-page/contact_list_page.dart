@@ -27,8 +27,8 @@ class _ContactListPageState extends State<ContactListPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<ContactBloc>(context)
-        .add(ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
+    BlocProvider.of<ContactBloc>(context).add(ObserveContacts(
+        userId: UserUtils.getCurrentUserId(context), lastDocument: null));
   }
 
   @override
@@ -47,13 +47,21 @@ class _ContactListPageState extends State<ContactListPage> {
           } else if (contactState is AllContactsState) {
             return SmartRefresher(
               controller: _refreshController,
+              enablePullUp: contactState.hasMore,
+              onLoading: () {
+                BlocProvider.of<ContactBloc>(context).add(ObserveContacts(
+                    userId: UserUtils.getCurrentUserId(context),
+                    lastDocument: contactState.lastDocument));
+              },
               onRefresh: () {
                 BlocProvider.of<ContactBloc>(context).add(ObserveContacts(
-                    userId: UserUtils.getCurrentUserId(context)));
+                    userId: UserUtils.getCurrentUserId(context),
+                    lastDocument: null));
               },
               child: BlocListener<ContactBloc, ContactState>(
                 listener: (context, state) {
                   _refreshController.refreshCompleted();
+                  _refreshController.loadComplete();
                 },
                 child: SingleChildScrollView(
                   child: contactState.contacts.isNotEmpty
@@ -65,7 +73,28 @@ class _ContactListPageState extends State<ContactListPage> {
                                   child: ContactView(
                                     contact: contact,
                                   )))
-                              .toList(),
+                              .toList()
+                            ..add(contactState.hasMore
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(8),
+                                      child: const Center(
+                                          child: CircularProgressIndicator()),
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      width: double.infinity,
+                                      padding: const EdgeInsets.all(8),
+                                      decoration: const BoxDecoration(
+                                          color: Colors.redAccent),
+                                      child: const Center(
+                                          child: Text("No more records!")),
+                                    ),
+                                  )),
                         )
                       : const Padding(
                           padding: EdgeInsets.all(8.0),
@@ -87,7 +116,8 @@ class _ContactListPageState extends State<ContactListPage> {
                       onPressed: () {
                         BlocProvider.of<ContactBloc>(context).add(
                             ObserveContacts(
-                                userId: UserUtils.getCurrentUserId(context)));
+                                userId: UserUtils.getCurrentUserId(context),
+                                lastDocument: null));
                       },
                       child: const Text("RETRY"))
                 ],

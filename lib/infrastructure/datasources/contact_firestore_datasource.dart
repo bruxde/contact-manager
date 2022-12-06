@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
+import 'package:contactmanager/domain/enitites/contacts_list.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/infrastructure/models/contact_model.dart';
 import 'package:dartz/dartz.dart';
 
 abstract class ContactFirestoreDatasource {
-  Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId);
+  Stream<Either<Failure, ContactsList>> observeContacts(
+      String userId, QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument);
 
   Future<Either<Failure, ContactEntity>> addNewContactToFirestore(
       String userId, ContactEntity newContact);
@@ -20,18 +22,26 @@ class ContactFirestoreDatasourceImpl extends ContactFirestoreDatasource {
   ContactFirestoreDatasourceImpl({required this.firestore});
 
   @override
-  Stream<Either<Failure, List<ContactEntity>>> observeContacts(
-      String userId) async* {
+  Stream<Either<Failure, ContactsList>> observeContacts(String userId,
+      QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument) async* {
+    const pageLimit = 10;
     final documentReference = firestore.collection("users").doc(userId);
     // right side
-    yield* documentReference
-        .collection("contacts")
+    final query = documentReference.collection("contacts");
+    yield* (lastDocument != null
+            ? query.startAfterDocument(lastDocument)
+            : query)
+        .limit(pageLimit)
         .snapshots()
-        .map((snapshot) => right<Failure, List<ContactEntity>>(snapshot.docs
-            .map((doc) => ContactModel.fromJson(doc.data())
-                .toDomain()
-                .copyWith(id: doc.id))
-            .toList()))
+        .map((snapshot) => right<Failure, ContactsList>(ContactsList(
+            list: snapshot.docs
+                .map((doc) => ContactModel.fromJson(doc.data())
+                    .toDomain()
+                    .copyWith(id: doc.id))
+                .toList(),
+            lastDocument: snapshot.docs.last,
+            hasMore: pageLimit == snapshot.docs.length &&
+                snapshot.docs.last.id != lastDocument?.id)))
         // left side
         .handleError((e) {
       if (e is FirebaseException) {

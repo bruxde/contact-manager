@@ -39,8 +39,9 @@ class DeleteContact extends ContactEvent {
 
 class ObserveContacts extends ContactEvent {
   final String userId;
+  final QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument;
 
-  ObserveContacts({required this.userId});
+  ObserveContacts({required this.userId, required this.lastDocument});
 }
 
 class ObservationFailureEvent extends ContactEvent {
@@ -51,6 +52,11 @@ class ObservationFailureEvent extends ContactEvent {
 
 class ObservationContactListEvent extends ContactEvent {
   final List<ContactEntity> contacts;
+  final QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument;
+  final bool hasMore;
 
-  ObservationContactListEvent({required this.contacts});
+  ObservationContactListEvent(
+      {required this.contacts,
+      required this.hasMore,
+      required this.lastDocument});
 }

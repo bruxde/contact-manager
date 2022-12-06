@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:contactmanager/domain/enitites/contacts_list.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/domain/usecases/contact_useceses.dart';
 import 'package:dartz/dartz.dart';
@@ -15,7 +17,7 @@ part 'contact_state.dart';
 class ContactBloc extends Bloc<ContactEvent, ContactState> {
   final ContactUsecases contactUsecases;
 
-  StreamSubscription<Either<Failure, List<ContactEntity>>>? _streamSubscription;
+  StreamSubscription<Either<Failure, ContactsList>>? _streamSubscription;
 
   ContactBloc({required this.contactUsecases}) : super(ContactInitial()) {
     on<GetAllContacts>((event, emit) async {
@@ -25,7 +27,8 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
       await failureOrList.fold((failure) async {
         emit(FailureContactState(failure: failure));
       }, (list) async {
-        emit(AllContactsState(contacts: list));
+        emit(AllContactsState(
+            contacts: list, hasMore: false, lastDocument: null));
       });
     });
 
@@ -85,17 +88,22 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     });
 
     on<ObserveContacts>((event, emit) async {
-      emit(LoadingContactsState());
-      _streamSubscription?.cancel();
+      if (event.lastDocument == null) {
+        emit(LoadingContactsState());
+        _streamSubscription?.cancel();
+      }
 
       print("get user contacts of user: " + event.userId);
       _streamSubscription = contactUsecases
-          .observeContacts(event.userId)
+          .observeContacts(event.userId, event.lastDocument)
           .listen((failureOrContacts) {
         failureOrContacts.fold((failure) {
           add(ObservationFailureEvent(failure: failure));
-        }, (contacts) {
-          add(ObservationContactListEvent(contacts: contacts));
+        }, (contactsList) {
+          add(ObservationContactListEvent(
+              contacts: contactsList.list,
+              hasMore: contactsList.hasMore,
+              lastDocument: contactsList.lastDocument));
         });
       });
     });
@@ -105,9 +113,18 @@ class ContactBloc extends Bloc<ContactEvent, ContactState> {
     });
 
     on<ObservationContactListEvent>((event, emit) {
-      emit(AllContactsState(
-        contacts: event.contacts,
-      ));
+      if (state is AllContactsState) {
+        emit((state as AllContactsState).copyWith(
+            lastDocument: event.lastDocument,
+            hasMore: event.hasMore,
+            contacts: (state as AllContactsState).contacts
+              ..addAll(event.contacts)));
+      } else {
+        emit(AllContactsState(
+            contacts: event.contacts,
+            hasMore: event.hasMore,
+            lastDocument: event.lastDocument));
+      }
     });
   }
 }

@@ -95,7 +95,7 @@ class _EditContactPageState extends State<EditContactPage> {
         listener: (context, state) {
           if (state is ContactEdited || state is ContactDeleted) {
             BlocProvider.of<ContactBloc>(context).add(
-                ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
+                ObserveContacts(userId: UserUtils.getCurrentUserId(context), lastDocument: null));
             AutoRouter.of(context).pop();
           }
         },

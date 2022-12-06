@@ -9,8 +9,23 @@ class LoadingContactsState extends ContactState {}
 
 class AllContactsState extends ContactState {
   final List<ContactEntity> contacts;
+  final QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument;
+  final bool hasMore;
 
-  AllContactsState({required this.contacts});
+  AllContactsState(
+      {required this.contacts,
+      required this.hasMore,
+      required this.lastDocument});
+
+  AllContactsState copyWith(
+      {List<ContactEntity>? contacts,
+      QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument,
+      bool? hasMore}) {
+    return AllContactsState(
+        contacts: contacts ?? this.contacts,
+        hasMore: hasMore ?? this.hasMore,
+        lastDocument: lastDocument ?? this.lastDocument);
+  }
 }
 
 class FailureContactState extends ContactState {

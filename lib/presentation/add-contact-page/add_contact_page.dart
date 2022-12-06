@@ -78,7 +78,7 @@ class _AddContactPageState extends State<AddContactPage> {
         listener: (context, state) {
           if (state is NewContactIsCreated) {
             BlocProvider.of<ContactBloc>(context).add(
-                ObserveContacts(userId: UserUtils.getCurrentUserId(context)));
+                ObserveContacts(userId: UserUtils.getCurrentUserId(context), lastDocument: null));
             AutoRouter.of(context).pop();
           }
         },

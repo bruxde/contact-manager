@@ -1,4 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:contactmanager/domain/enitites/contact_entity.dart';
+import 'package:contactmanager/domain/enitites/contacts_list.dart';
 import 'package:contactmanager/domain/failure/failures.dart';
 import 'package:contactmanager/domain/repositories/contact_repository.dart';
 import 'package:contactmanager/infrastructure/datasources/contact_remote_datasource.dart';
@@ -70,8 +72,8 @@ class ContactRepositoryImpl extends ContactRepository {
   }
 
   @override
-  Stream<Either<Failure, List<ContactEntity>>> observeContacts(String userId) {
-    return contactFirestoreDatasource.observeContacts(userId);
+  Stream<Either<Failure, ContactsList>> observeContacts(String userId, QueryDocumentSnapshot<Map<String, dynamic>>? lastDocument) {
+    return contactFirestoreDatasource.observeContacts(userId, lastDocument);
   }
 
   @override
